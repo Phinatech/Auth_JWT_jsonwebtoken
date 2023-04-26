@@ -14,4 +14,19 @@ export const getALL = async (req: Request, res: Response) => {
   }
 };
 
-export const createGameUser = async (req: Request, res: Response) => {};
+export const createGameUser = async (req: Request, res: Response) => {
+  try {
+    const { name, details } = req.body;
+    const creategame = await gameModel.create({
+      name,
+      details,
+    });
+
+    return res.status(200).json({
+      message: "Successfully created a user",
+      data: creategame,
+    });
+  } catch (error) {
+    console.log("An error in creating a Games");
+  }
+};
