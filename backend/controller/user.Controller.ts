@@ -38,16 +38,64 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
+//Getting all user
 export const getAlluser = async (req: Request, res: Response) => {
   try {
-    const getall = await userModel.find()
+    const getall = await userModel.find();
     return res.status(200).json({
-      message: `Gotten all ${getall.length} user`
-      data: getall
-    })
+      message: `Gotten all ${getall.length} user`,
+      data: getall,
+    });
   } catch (error) {
     return res.status(404).json({
       message: `An error occured in getting all  user ${error}`,
+    });
+  }
+};
+
+//Getting one user
+export const getSingleuser = async (req: Request, res: Response) => {
+  try {
+    const getsingle = await userModel.findById(req.params.userid);
+    return res.status(200).json({
+      message: `Welcome this user data has been gotten from the server`,
+      data: getsingle,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      message: `An error occured in getting a user ${error}`,
+    });
+  }
+};
+
+export const loginuser = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const logusermethod = await userModel.findOne({ email });
+
+    const checking = await bcrypt.compare(password, logusermethod?.password!);
+
+    if (logusermethod) {
+      if (checking) {
+        if (logusermethod?.verified && logusermethod.token === "") {
+          const accesstoken = jwt.sign(
+            {
+              id: logusermethod?._id,
+            },
+            "acessTokenSecret",
+            {}
+          );
+          return res.status(200).json({
+            message: `Succesfully`,
+            data: logusermethod,
+          });
+        }
+      }
+    } else {
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: `An error occured in getting a user ${error}`,
     });
   }
 };
