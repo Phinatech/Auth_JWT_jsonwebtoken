@@ -2,11 +2,13 @@ import mongoose from "mongoose";
 
 interface Iuser {
   name: string;
+  userName: string;
   email: string;
   password: string;
   confirmPassword: string;
   token: string;
   verified: boolean;
+  OTP: string;
 }
 
 interface Usermodel extends Iuser, mongoose.Document {}
@@ -14,6 +16,9 @@ interface Usermodel extends Iuser, mongoose.Document {}
 const userSchema = new mongoose.Schema<Iuser>(
   {
     name: {
+      type: String,
+    },
+    userName: {
       type: String,
     },
     email: {
@@ -30,6 +35,9 @@ const userSchema = new mongoose.Schema<Iuser>(
     },
     verified: {
       type: Boolean,
+    },
+    OTP: {
+      type: String,
     },
   },
   { timestamps: true }
