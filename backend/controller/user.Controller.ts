@@ -89,10 +89,14 @@ export const loginuser = async (req: Request, res: Response) => {
             message: `Succesfully`,
             data: logusermethod,
           });
+        } else {
         }
       }
-    } else {
     }
+    return res.status(200).json(200).json({
+      message: "Succesffuly gotten all data",
+      data: logusermethod,
+    });
   } catch (error) {
     return res.status(404).json({
       message: `An error occured in getting a user ${error}`,

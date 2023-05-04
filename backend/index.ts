@@ -8,6 +8,20 @@ const app: Application = express();
 Mainapp(app);
 Dbconfig();
 
-app.listen(Port, () => {
+const server = app.listen(Port, () => {
   console.log("server is Listening on :", Port);
+});
+
+process.on("uncaughtException", (err: Error) => {
+  console.log("shutting down serve");
+  console.log(err);
+  process;
+});
+
+process.on("unhandledRejection", (reason: any) => {
+  console.log("shutting down server unhandledRejection");
+  console.log(reason);
+  server.close(() => {
+    process.exit(1);
+  });
 });
