@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface Igame {
   name: string;
   details: string;
 }
 
-interface gameModel extends Igame, mongoose.Document {}
+interface gameModel extends Igame, Document {}
 
-const gameSchema = new mongoose.Schema(
+const gameSchema = new Schema(
   {
     name: {
       type: String,
