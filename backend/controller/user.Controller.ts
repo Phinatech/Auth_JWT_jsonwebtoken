@@ -3,6 +3,7 @@ import userModel from "../model/user.Model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { verifyUser } from "../utils/Email";
 
 //Registering a user
 export const registerUser = async (req: Request, res: Response) => {
@@ -25,6 +26,8 @@ export const registerUser = async (req: Request, res: Response) => {
       token,
       OTP,
     });
+
+    verifyUser(registing);
     if (registing) {
       return res.status(200).json({
         message: "User successfully created",
@@ -53,9 +56,10 @@ export const getAlluser = async (req: Request, res: Response) => {
       message: `Gotten all ${getall.length} user`,
       data: getall,
     });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(404).json({
       message: `An error occured in getting all  user ${error}`,
+      data: error.message,
     });
   }
 };
@@ -86,18 +90,22 @@ export const loginuser = async (req: Request, res: Response) => {
     if (logusermethod) {
       if (checking) {
         if (logusermethod?.verified && logusermethod.token === "") {
+          //thi is for the accesstoken that exprires every 20s
           const accesstoken = jwt.sign(
             {
               id: logusermethod?._id,
             },
             "acessTokenSecret",
-            {}
+            { expiresIn: "20s" }
           );
           return res.status(200).json({
             message: `Succesfully`,
-            data: logusermethod,
+            data: accesstoken,
           });
         } else {
+          return res.status(400).json({
+            message: "something went wrong",
+          });
         }
       }
     }
@@ -108,6 +116,28 @@ export const loginuser = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       message: `An error occured in getting a user ${error}`,
+    });
+  }
+};
+
+//verify a user
+export const verifinguser = async (req: Request, res: Response) => {
+  try {
+    const verification = await userModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        verified: true,
+        token: "",
+      },
+      { new: true }
+    );
+    return res.status(200).json({
+      message: "Successfully updated data",
+      data: verification,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: "An error occurred while updating",
     });
   }
 };
