@@ -16,14 +16,14 @@ const GOOGLE_REFRESH =
   "1//040hViIk87d7BCgYIARAAGAQSNwF-L9Irndv3mRaWeIYqkkuBDfD461UjwwkhkRjYqdNG4CyClI4LfYpSVCVNbWoRvuh3CnGb3-M";
 //This is the gotten from google api , use the rediredt link to work on that and its changes
 const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_REFRESH);
-oAuth.setCredentials({ refresh_token: GOOGLE_REFRESH });
+oAuth.setCredentials({ access_token: GOOGLE_REFRESH });
 
 const ClientURL = "";
 
 //verifing the user on the platform:
 export const verifyUser = async (user: any) => {
   try {
-    const GetAccessToken = await oAuth.getAccessToken();
+    const GetAccessToken: any = await oAuth.getAccessToken();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",

@@ -104,7 +104,7 @@ export const loginuser = async (req: Request, res: Response) => {
           });
         } else {
           return res.status(400).json({
-            message: "something went wrong",
+            message: "something went wrong in checking",
           });
         }
       }
@@ -116,6 +116,7 @@ export const loginuser = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       message: `An error occured in getting a user ${error}`,
+      data: error,
     });
   }
 };

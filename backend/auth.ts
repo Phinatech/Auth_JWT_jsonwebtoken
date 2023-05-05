@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-export const authJwt = (req: any, res: Response, next: NextFunction) => {
+export const authheaders = (req: any, res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authoriation;
     if (token) {
